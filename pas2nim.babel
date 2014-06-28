@@ -1,0 +1,8 @@
+[Package]
+name          = "pas2nim"
+version       = "0.9.6"
+author        = "Andreas Rumpf"
+description   = "pas2nim is a tool to translate Pascal code to Nimrod."
+license       = "MIT"
+
+SkipFiles = "pas2nim.exe"
