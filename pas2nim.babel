@@ -5,4 +5,8 @@ author        = "Andreas Rumpf"
 description   = "pas2nim is a tool to translate Pascal code to Nimrod."
 license       = "MIT"
 
-SkipFiles = "pas2nim.exe"
+bin = "pas2nim"
+
+[Deps]
+Requires: "nimrod >= 0.9.4"
+
