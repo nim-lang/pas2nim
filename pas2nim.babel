@@ -2,11 +2,11 @@
 name          = "pas2nim"
 version       = "0.9.6"
 author        = "Andreas Rumpf"
-description   = "pas2nim is a tool to translate Pascal code to Nimrod."
+description   = "pas2nim is a tool to translate Pascal code to Nim."
 license       = "MIT"
 
 bin = "pas2nim"
 
 [Deps]
-Requires: "nimrod >= 0.9.4"
+Requires: "nim >= 0.9.4"
 

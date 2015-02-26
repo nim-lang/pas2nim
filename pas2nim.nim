@@ -1,6 +1,6 @@
 #
 #
-#      Pas2nim - Pascal to Nimrod source converter
+#      Pas2nim - Pascal to Nim source converter
 #        (c) Copyright 2012 Andreas Rumpf
 #
 #    See the file "copying.txt", included in this
@@ -14,13 +14,13 @@ import
 const
   Version = "0.8"
   Usage = """
-pas2nim - Pascal to Nimrod source converter
+pas2nim - Pascal to Nim source converter
   (c) 2012 Andreas Rumpf
 Usage: pas2nim [options] inputfile [options]
 Options:
   -o, --out:FILE         set output filename
   --ref                  convert ^typ to ref typ (default: ptr typ)
-  --boot                 use special translation rules for the Nimrod compiler
+  --boot                 use special translation rules for the Nim compiler
   -v, --version          write pas2nim's version
   -h, --help             show this help
 """

@@ -1,6 +1,6 @@
 #
 #
-#      Pas2nim - Pascal to Nimrod source converter
+#      Pas2nim - Pascal to Nim source converter
 #        (c) Copyright 2012 Andreas Rumpf
 #
 #    See the file "copying.txt", included in this
@@ -15,10 +15,10 @@ import
 
 const
   MaxLineLength* = 80         # lines longer than this lead to a warning
-  numChars*: TCharSet = {'0'..'9', 'a'..'z', 'A'..'Z'}
-  SymChars*: TCharSet = {'a'..'z', 'A'..'Z', '0'..'9', '\x80'..'\xFF'}
-  SymStartChars*: TCharSet = {'a'..'z', 'A'..'Z', '\x80'..'\xFF'}
-  OpChars*: TCharSet = {'+', '-', '*', '/', '<', '>', '!', '?', '^', '.', '|',
+  numChars*: set[char] = {'0'..'9', 'a'..'z', 'A'..'Z'}
+  SymChars*: set[char] = {'a'..'z', 'A'..'Z', '0'..'9', '\x80'..'\xFF'}
+  SymStartChars*: set[char] = {'a'..'z', 'A'..'Z', '\x80'..'\xFF'}
+  OpChars*: set[char] = {'+', '-', '*', '/', '<', '>', '!', '?', '^', '.', '|',
     '=', ':', '%', '&', '$', '@', '~', '\x80'..'\xFF'}
 
 # keywords are sorted!
@@ -99,20 +99,20 @@ proc openLexer*(lex: var TLexer, filename: string, inputstream: PLLStream) =
   lex.filename = filename
 
 proc closeLexer*(lex: var TLexer) =
-  inc(gLinesCompiled, lex.LineNumber)
+  inc(gLinesCompiled, lex.lineNumber)
   closeBaseLexer(lex)
 
 proc getColumn(L: TLexer): int =
   result = getColNumber(L, L.bufPos)
 
 proc getLineInfo*(L: TLexer): TLineInfo =
-  result = newLineInfo(L.filename, L.linenumber, getColNumber(L, L.bufpos))
+  result = newLineInfo(L.filename, L.lineNumber, getColNumber(L, L.bufpos))
 
 proc lexMessage*(L: TLexer, msg: TMsgKind, arg = "") =
   msgs.globalError(getLineInfo(L), msg, arg)
 
 proc lexMessagePos(L: var TLexer, msg: TMsgKind, pos: int, arg = "") =
-  var info = newLineInfo(L.filename, L.linenumber, pos - L.lineStart)
+  var info = newLineInfo(L.filename, L.lineNumber, pos - L.lineStart)
   msgs.globalError(info, msg, arg)
 
 proc tokKindToStr*(k: TTokKind): string =
@@ -166,11 +166,11 @@ proc printTok(tok: TToken) =
   writeln(stdout, $tok)
 
 proc setKeyword(L: var TLexer, tok: var TToken) =
-  var x = binaryStrSearch(keywords, toLower(tok.ident.s))
+  var x = binaryStrSearch(Keywords, toLower(tok.ident.s))
   if x < 0: tok.xkind = pxSymbol
   else: tok.xKind = TTokKind(x + ord(firstKeyword))
 
-proc matchUnderscoreChars(L: var TLexer, tok: var TToken, chars: TCharSet) =
+proc matchUnderscoreChars(L: var TLexer, tok: var TToken, chars: set[char]) =
   # matches ([chars]_)*
   var pos = L.bufpos              # use registers for pos, buf
   var buf = L.buf
@@ -266,9 +266,9 @@ proc getNumber10(L: var TLexer, tok: var TToken) =
         tok.xkind = pxInt64Lit
       else:
         tok.xkind = pxIntLit
-  except EInvalidValue:
+  except ValueError:
     lexMessage(L, errInvalidNumber, tok.literal)
-  except EOverflow:
+  except OverflowError:
     lexMessage(L, errNumberOutOfRange, tok.literal)
 
 proc handleCRLF(L: var TLexer, pos: int): int =

@@ -1,14 +1,14 @@
 #
 #
-#      Pas2nim - Pascal to Nimrod source converter
+#      Pas2nim - Pascal to Nim source converter
 #        (c) Copyright 2012 Andreas Rumpf
 #
 #    See the file "copying.txt", included in this
 #    distribution, for details about the copyright.
 #
 
-# This module implements the parser of the Pascal variant Nimrod is written in.
-# It transfers a Pascal module into a Nimrod AST. Then the renderer can be
+# This module implements the parser of the Pascal variant Nim is written in.
+# It transfers a Pascal module into a Nimf AST. Then the renderer can be
 # used to convert the AST to its text representation.
 
 import 
@@ -947,7 +947,7 @@ proc parseRoutineSpecifiers(p: var TParser, noBody: var bool): PNode =
       getTok(p)
       opt(p, pxSemicolon)
     of "procvar": 
-      # This is a fake for the Nimrod compiler. There is no ``procvar``
+      # This is a fake for the Nim compiler. There is no ``procvar``
       # directive in Pascal.
       if result.kind == nkEmpty: result = newNodeP(nkPragma, p)
       addSon(result, newIdentNodeP(getIdent("procvar"), p))
